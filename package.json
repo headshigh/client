@@ -11,18 +11,25 @@
   "dependencies": {
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
+    "@types/mime": "^3.0.1",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
+    "@web-std/file": "^3.0.3",
     "autoprefixer": "10.4.15",
+    "axios": "^1.5.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
     "ethers": "^5.7.2",
     "formidable": "^3.5.0",
+    "js-ipfs": "^0.0.301",
     "lucide-react": "^0.268.0",
+    "mime": "^2.6.0",
+    "multer": "^1.4.5-lts.1",
     "next": "13.4.13",
+    "next-connect": "^1.0.0-next.4",
     "nft.storage": "^7.1.1",
     "postcss": "8.4.27",
     "react": "18.2.0",
@@ -33,6 +40,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "@types/formidable": "^3.4.1"
+    "@types/formidable": "^3.4.1",
+    "@types/multer": "^1.4.7"
   }
 }

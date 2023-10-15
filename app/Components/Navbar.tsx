@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { signerContext } from "../context/SignerContext";
 import Link from "next/link";
 import Image from "next/image";
+
 function Navbar() {
   const signer = useContext(signerContext);
   console.log(signer.signer);

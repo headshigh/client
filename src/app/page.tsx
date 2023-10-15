@@ -14,6 +14,7 @@ export interface candidate {
   name: string;
   address: string;
   id: number;
+  url: string;
   voteCount: number;
 }
 function Page() {
@@ -32,7 +33,7 @@ function Page() {
       let provider = signerValues.provider;
       let signer = signerValues.signer;
       const contract = new ethers.Contract(
-        "0x5693B54c4c03aE96F2cBe7c79ac25E549Ed0E191",
+        "0xe73453083D525Cd9Ac1543DD2Ee1e58184548aEb",
         voting.abi,
         provider.getSigner()
       );
@@ -47,7 +48,7 @@ function Page() {
       let provider = signerValues.provider;
       let signer = signerValues.signer;
       const contract = new ethers.Contract(
-        "0x5693B54c4c03aE96F2cBe7c79ac25E549Ed0E191",
+        "0xe73453083D525Cd9Ac1543DD2Ee1e58184548aEb",
         voting.abi,
         provider.getSigner()
       );
@@ -67,12 +68,11 @@ function Page() {
       let provider = signerValues.provider;
       let signer = signerValues.signer;
       const contract = new ethers.Contract(
-        "0x5693B54c4c03aE96F2cBe7c79ac25E549Ed0E191",
+        "0xe73453083D525Cd9Ac1543DD2Ee1e58184548aEb",
         voting.abi,
         provider.getSigner()
       );
       await contract.requestEligiblity(signer);
-
       setEligiblityLoading(false);
     } catch (err) {
       setEligiblityLoading(false);
@@ -86,6 +86,8 @@ function Page() {
     //   console.log("new candidate added");
     // });
   }, []);
+  console.log(candidates);
+
   return (
     <div className="">
       <Navbar />

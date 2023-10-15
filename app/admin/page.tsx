@@ -1,11 +1,12 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { signerContext } from "../context/SignerContext";
-import voting from "../../utils/voting.json";
+import voting from "../../src/utils/voting.json";
 import { ethers } from "ethers";
 // import { Button, Card, Input } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import {
   Card,
   CardContent,
@@ -14,16 +15,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+
 import { Separator } from "@/components/ui/separator";
+import Navbar from "../Components/Navbar";
+
 function Admin() {
-  const [requests, setRequests] = useState<string[]>(["111111"]);
+  const [requests, setRequests] = useState<string[]>();
   const router = useRouter();
+  const [candidateName, setCandidateName] = useState("");
+  const [candidateAddress, setCandidateAddress] = useState("");
   const [approveLoading, setApproveLoading] = useState(false);
+  const [file, setFile] = useState<File>();
+  const [candidateLoading, setCandidateLoading] = useState(false);
   const [addEligibleLoading, setAddEligibleLoading] = useState(false);
   const [addEligiblityAddr, setAddEligiblityAddr] = useState("");
   const signerValues = useContext(signerContext);
   console.log(requests);
   console.log(signerValues.signer);
+  console.log(file);
   const approveRequest = async (address: string) => {
     setApproveLoading(true);
     let provider = signerValues.provider;
@@ -47,6 +56,45 @@ function Admin() {
     const requests = await contract.getAllRequests();
     setRequests(requests);
   };
+  const createCandidate = async (address: string, name: string) => {
+    if (!file) return;
+    setCandidateAddress("");
+    setCandidateLoading(true);
+    setCandidateName("");
+    //@ts-expect-error
+    const { ethereum } = window;
+    if (ethereum) {
+      const formdata = new FormData();
+      formdata.append("name", name);
+      formdata.append("description", "description");
+      formdata.append("file", file || "");
+      console.log(file.name);
+      formdata.append("filename", file.name);
+      let provider = signerValues.provider;
+      let signer = signerValues.signer;
+      const contract = new ethers.Contract(
+        "0xe73453083D525Cd9Ac1543DD2Ee1e58184548aEb",
+        voting.abi,
+        provider.getSigner()
+      );
+      const res = await axios.post(
+        "http://localhost:3000/api/hello",
+        formdata,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("res", res);
+      await contract.addCandidate(address, name, res.data.uri.url, file.name);
+      contract.on("addCandidateEvent", (recipient, canId) => {
+        console.log(canId, "has been added as a new candidate");
+      });
+      setCandidateLoading(false);
+      setFile(undefined);
+    }
+  };
   useEffect(() => {
     getAllRequests();
   }, []);
@@ -58,6 +106,7 @@ function Admin() {
   }
   return (
     <div className="min-h-screen ">
+      <Navbar />
       <Card className="dark bg-black w-full">
         <CardHeader>
           <CardTitle>Add Eligible Voter</CardTitle>
@@ -85,7 +134,55 @@ function Admin() {
               variant="secondary"
               className="shrink-0"
             >
-              Make Eligible
+              {!addEligibleLoading ? (
+                <h1>Make Eligible</h1>
+              ) : (
+                <h1 className="animate-pulse">Loading..</h1>
+              )}
+            </Button>
+          </div>
+          <Separator className="my-4" />
+          <div className=" flex flex-col gap-2 pb-6 pt-6">
+            <CardTitle>Add Candidate</CardTitle>
+            <CardDescription className="">
+              Voters can view candidates and cast votes
+            </CardDescription>
+          </div>
+          <div className="flex gap-6">
+            <Input
+              onChange={(e) => setCandidateName(e.target.value)}
+              value={candidateName}
+              placeholder="Candidate name"
+            />
+            <Input
+              onChange={(e) => setCandidateAddress(e.target.value)}
+              value={candidateAddress}
+              placeholder="Candidate Address"
+            />
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Input
+                //@ts-expect-error
+                onChange={(e) => setFile(e.target.files[0])}
+                id="picture"
+                type="file"
+              />
+            </div>
+            <Button
+              variant="secondary"
+              className="shrink-0"
+              onClick={async () => {
+                try {
+                  await createCandidate(candidateAddress, candidateName);
+                } catch (err) {
+                  console.log(err);
+                }
+              }}
+            >
+              {!candidateLoading ? (
+                <h1>Add Candidate</h1>
+              ) : (
+                <h1 className="animate-pulse">Loading...</h1>
+              )}
             </Button>
           </div>
           <Separator className="my-4" />
@@ -126,4 +223,5 @@ function Admin() {
     </div>
   );
 }
+
 export default Admin;

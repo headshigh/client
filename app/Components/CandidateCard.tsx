@@ -1,8 +1,10 @@
 "use client";
 import { signerContext } from "../context/SignerContext";
 import { useContext } from "react";
-import voting from "../../utils/voting.json";
+import voting from "../../src/utils/voting.json";
 import { ethers } from "ethers";
+import { Button } from "@/components/ui/button";
+import { ipfsToHTTPS } from "@/helper";
 import {
   Card,
   Image,
@@ -11,7 +13,6 @@ import {
   Badge,
   createStyles,
   Center,
-  Button,
   rem,
 } from "@mantine/core";
 import {
@@ -57,8 +58,32 @@ const useStyles = createStyles((theme) => ({
         : theme.colors.gray[5],
   },
 }));
-
-export function CandidateCard({ candidate }: { candidate: candidate }) {
+interface meta {
+  name: string;
+  description: string;
+  imageURL: string;
+}
+export function CandidateCard({
+  candidate,
+  isEligibleToVote,
+}: {
+  candidate: candidate;
+  isEligibleToVote: Boolean;
+}) {
+  const [meta, setMeta] = useState<meta>();
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      const metadataResponse = await fetch(ipfsToHTTPS(candidate.url));
+      if (metadataResponse.status != 200) return;
+      const json = await metadataResponse.json();
+      setMeta({
+        name: json.name,
+        description: json.description,
+        imageURL: ipfsToHTTPS(json.image),
+      });
+    };
+    void fetchMetadata();
+  }, []);
   const { classes } = useStyles();
   const [voteLoading, setVoteLoading] = useState(false);
   const signerValues = useContext(signerContext);
@@ -74,17 +99,26 @@ export function CandidateCard({ candidate }: { candidate: candidate }) {
       );
       await contract.vote(candidateId);
       setVoteLoading(false);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      if (err.message.includes("revert")) {
+        alert("Voter has already voted");
+      }
+      setVoteLoading(false);
     }
   };
+
   return (
+    //
     <Card radius="md" className={classes.card}>
       <Card.Section className={classes.imageSection}>
-        <Image src={candidate.image} alt="Tesla Model S" />
+        <Image
+          className="h-1/2 max-w-full  object-cover"
+          src={meta?.imageURL}
+          alt="Tesla Model S"
+        />
       </Card.Section>
       <Card.Section className={classes.section}>
-        <Text fz="sm" c="dimmed" className={classes.label}>
+        <Text fz="lg" c="dimmed" className={classes.label}>
           {candidate.name}
         </Text>
       </Card.Section>
@@ -95,8 +129,9 @@ export function CandidateCard({ candidate }: { candidate: candidate }) {
       </Card.Section>
       <Card.Section className={classes.section}>
         <Group spacing={30}>
-          <button
-            className="bg-white hover:bg-slate-100 font-medium text-black  rounded px-4 py-2 "
+          <Button
+            disabled={!isEligibleToVote}
+            variant="secondary"
             onClick={() => vote(candidate.id)}
             style={{ flex: 1 }}
           >
@@ -105,7 +140,7 @@ export function CandidateCard({ candidate }: { candidate: candidate }) {
             ) : (
               <h1 className="animate-pulse">Loading...</h1>
             )}
-          </button>
+          </Button>
         </Group>
       </Card.Section>
     </Card>
