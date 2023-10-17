@@ -7,12 +7,6 @@ import { Button } from "@/components/ui/button";
 import { ipfsToHTTPS } from "@/helper";
 import { Card, Image, Text, Group, Badge, Center, rem } from "@mantine/core";
 import { createStyles } from "@mantine/core";
-import {
-  IconGasStation,
-  IconGauge,
-  IconManualGearbox,
-  IconUsers,
-} from "@tabler/icons-react";
 import { candidate } from "../page";
 import { useEffect, useState } from "react";
 const useStyles = createStyles((theme: any) => ({
