@@ -7,6 +7,7 @@ import { NFTStorage } from "nft.storage";
 import fs, { readFileSync } from "fs";
 import { unlinkSync } from "fs";
 import mime from "mime";
+export const runtime = "edge";
 const client = new NFTStorage({
   token:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEY1RjM5MzVBQzg1MzA5NDc0MUZCMGQyNTY4NDcxMjMyMDA3OTBFMzUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4MzA5NjQzMDc5OCwibmFtZSI6Im5ldyJ9.RGWsbMjMAoarN8iuRZ4pNPkkLV_hXvO2oQn_d1jEPVo",
