@@ -23,7 +23,6 @@ import {
 } from "@tabler/icons-react";
 import { candidate } from "../page";
 import { useEffect, useState } from "react";
-
 const useStyles = createStyles((theme) => ({
   card: {
     backgroundColor: "black",
@@ -106,7 +105,6 @@ export function CandidateCard({
       setVoteLoading(false);
     }
   };
-
   return (
     //
     <Card radius="md" className={classes.card}>

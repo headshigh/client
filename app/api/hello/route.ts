@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
   unlinkSync(filePath);
   return NextResponse.json({ uri, filename: data.get("filename") });
 }
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };

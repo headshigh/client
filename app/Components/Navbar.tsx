@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { useContext } from "react";
-import { signerContext } from "../context/SignerContext";
+import { signerContext, signerContextType } from "../context/SignerContext";
 import Link from "next/link";
 import Image from "next/image";
 
 function Navbar() {
-  const signer = useContext(signerContext);
+  const signer = useContext<signerContextType>(signerContext);
   console.log(signer.signer);
   return (
     <div>
@@ -23,6 +23,7 @@ function Navbar() {
             />
           </div>
         ) : (
+          //@ts-expect-error
           <h1 onClick={() => signer.connectWallet()}>Connect wallet</h1>
         )}
       </div>
