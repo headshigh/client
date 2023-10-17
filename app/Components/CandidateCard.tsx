@@ -74,6 +74,7 @@ export function CandidateCard({
       });
     };
     void fetchMetadata();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { classes } = useStyles();
   const [voteLoading, setVoteLoading] = useState(false);
