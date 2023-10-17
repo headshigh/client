@@ -5,16 +5,8 @@ import voting from "../../src/utils/voting.json";
 import { ethers } from "ethers";
 import { Button } from "@/components/ui/button";
 import { ipfsToHTTPS } from "@/helper";
-import {
-  Card,
-  Image,
-  Text,
-  Group,
-  Badge,
-  createStyles,
-  Center,
-  rem,
-} from "@mantine/core";
+import { Card, Image, Text, Group, Badge, Center, rem } from "@mantine/core";
+import { createStyles } from "@mantine/core";
 import {
   IconGasStation,
   IconGauge,
@@ -23,7 +15,7 @@ import {
 } from "@tabler/icons-react";
 import { candidate } from "../page";
 import { useEffect, useState } from "react";
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme: any) => ({
   card: {
     backgroundColor: "black",
     maxWidth: "400px",

@@ -65,6 +65,7 @@ function Page() {
     // contract.on("addCandidateEvent", () => {
     //   console.log("new candidate added");
     // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [1]);
   console.log(candidates);
   return (
