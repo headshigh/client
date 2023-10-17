@@ -9,9 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/server": "^11.11.0",
-    "@mantine/hooks": "^6.0.19",
     "@mantine/next": "^6.0.19",
     "@mantine/core": "^7.1.3",
     "@radix-ui/react-separator": "^1.0.3",
