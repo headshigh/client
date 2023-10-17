@@ -2,12 +2,10 @@ import { writeFile } from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import { File } from "@web-std/file";
-
 import { NFTStorage } from "nft.storage";
 import fs, { readFileSync } from "fs";
 import { unlinkSync } from "fs";
 import mime from "mime";
-export const runtime = "edge";
 const client = new NFTStorage({
   token:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEY1RjM5MzVBQzg1MzA5NDc0MUZCMGQyNTY4NDcxMjMyMDA3OTBFMzUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4MzA5NjQzMDc5OCwibmFtZSI6Im5ldyJ9.RGWsbMjMAoarN8iuRZ4pNPkkLV_hXvO2oQn_d1jEPVo",
@@ -15,11 +13,9 @@ const client = new NFTStorage({
 export async function POST(request: NextRequest) {
   const data = await request.formData();
   const file: File | null = data.get("file") as unknown as File;
-
   if (!file) {
     return NextResponse.json({ success: false });
   }
-
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
